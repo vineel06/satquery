@@ -1,0 +1,222 @@
+@import "tailwindcss";
+
+:root {
+  --bg-0: #04060c;
+  --bg-1: #080d1c;
+  --bg-2: #0d1528;
+  --glass-bg: rgba(15, 24, 48, 0.55);
+  --glass-border: rgba(120, 200, 255, 0.15);
+  --glass-highlight: rgba(255, 255, 255, 0.08);
+  --accent-cyan: #22d3ee;
+  --accent-blue: #3b82f6;
+  --accent-green: #4ade80;
+  --accent-orange: #fb923c;
+  --accent-purple: #a78bfa;
+  --accent-pink: #f472b6;
+  --text-1: #e8f1ff;
+  --text-2: #9fb3d1;
+  --text-3: #64748b;
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.55);
+  --glow-cyan: 0 0 20px rgba(34, 211, 238, 0.4);
+  --glow-blue: 0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+[data-theme="light"] {
+  --bg-0: #eef4ff;
+  --bg-1: #e6efff;
+  --bg-2: #dbe7ff;
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(30, 64, 175, 0.14);
+  --glass-highlight: rgba(255, 255, 255, 0.7);
+  --accent-cyan: #0891b2;
+  --accent-blue: #2563eb;
+  --accent-green: #16a34a;
+  --text-1: #0f172a;
+  --text-2: #475569;
+  --text-3: #94a3b8;
+  --shadow-glass: 0 8px 32px rgba(30, 64, 175, 0.15);
+}
+
+html, body {
+  background: var(--bg-0);
+  color: var(--text-1);
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* ─── Earth background image behind everything ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('/earth-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.18;
+  filter: blur(2px) saturate(140%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Color glows */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 15% 0%, rgba(34, 211, 238, 0.18), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 100%, rgba(59, 130, 246, 0.16), transparent 60%),
+    radial-gradient(ellipse 40% 30% at 50% 50%, rgba(74, 222, 128, 0.06), transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+[data-theme="light"] body::before { opacity: 0.08; }
+
+/* ─── GLASS SYSTEM ──────────────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 var(--glass-highlight),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 250ms ease, border-color 250ms ease;
+}
+
+.glass::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(120, 200, 255, 0.45), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glass-sm { border-radius: 12px; padding: 12px; }
+.glass-md { border-radius: 16px; padding: 16px; }
+.glass-lg { border-radius: 20px; padding: 24px; }
+
+/* Hover glow — subtle neon bloom */
+.glass-hover:hover {
+  border-color: rgba(34, 211, 238, 0.4);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.55),
+    0 0 32px rgba(34, 211, 238, 0.18),
+    inset 0 1px 0 var(--glass-highlight);
+}
+
+/* Clay button */
+.clay-btn {
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.25),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 120ms ease, box-shadow 200ms ease;
+}
+.clay-btn:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.25),
+    0 6px 20px rgba(34, 211, 238, 0.25);
+}
+.clay-btn:active { transform: translateY(1px); }
+
+/* ─── SCROLLBARS ─────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(120, 200, 255, 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(120, 200, 255, 0.35); }
+
+*:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
+.mono {
+  font-family: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+  font-feature-settings: 'tnum';
+}
+
+/* ─── LOADING SCREEN ──────────────────────────────── */
+.satquery-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-0);
+  animation: fadeOut 400ms ease 1200ms forwards;
+  pointer-events: none;
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(40px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(40px) rotate(-360deg); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ─── MAPLIBRE THEME OVERRIDES ─────────────────────── */
+.maplibregl-ctrl-group {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+  box-shadow: var(--shadow-glass) !important;
+}
+.maplibregl-ctrl-group button {
+  background: transparent !important;
+  color: var(--text-1) !important;
+  width: 32px !important;
+  height: 32px !important;
+}
+.maplibregl-ctrl-group button:hover {
+  background: rgba(34, 211, 238, 0.15) !important;
+}
+.maplibregl-ctrl-attrib {
+  background: var(--glass-bg) !important;
+  color: var(--text-2) !important;
+  font-size: 10px !important;
+  border-radius: 6px !important;
+}
+.maplibregl-ctrl-scale {
+  background: var(--glass-bg) !important;
+  color: var(--text-2) !important;
+  border-color: var(--glass-border) !important;
+  font-size: 10px !important;
+  border-radius: 4px !important;
+}
+.maplibregl-popup-content {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 12px !important;
+  color: var(--text-1) !important;
+  padding: 10px 14px !important;
+  font-family: var(--font-inter), system-ui !important;
+  box-shadow: var(--shadow-glass) !important;
+}
+.maplibregl-popup-tip { border-top-color: var(--glass-bg) !important; }
